@@ -17,6 +17,11 @@ class Applicant:
     def todocx(self):
         doc = docx.Document()
 
+        str_q1 = str(len(self.q1))
+        str_q2 = str(len(self.q2))
+        str_q3 = str(len(self.q3))
+        str_q4 = str(len(self.q4))
+
         para = doc.add_paragraph()
         run = para.add_run(self.info)
         run.font.name = 'Arial'
@@ -32,7 +37,7 @@ class Applicant:
         run.font.name = 'Arial'
 
         para = doc.add_paragraph()
-        run = para.add_run("2. 자기 소개와 함께 멋쟁이사자처럼에 지원하게 된 동기를 적어 주세요.")
+        run = para.add_run("2. 자기 소개와 함께 멋쟁이사자처럼에 지원하게 된 동기를 적어 주세요. [글자수] "+str_q1+" 자")
         run.font.name = 'Arial'
         run.bold = True
 
@@ -41,7 +46,7 @@ class Applicant:
         run.font.name = 'Arial'
 
         para = doc.add_paragraph()
-        run = para.add_run("3. 기억에 남는 프로그래밍 경험과 느낀 점에 대해 적어 주세요. 만약 프로그래밍 경험이 없다면, 어떤 언어를 배우고 싶은지 적어 주세요.")
+        run = para.add_run("3. 기억에 남는 프로그래밍 경험과 느낀 점에 대해 적어 주세요. 만약 프로그래밍 경험이 없다면, 어떤 언어를 배우고 싶은지 적어 주세요. [글자수] "+str_q2+" 자")
         run.font.name = 'Arial'
         run.bold = True
 
@@ -50,7 +55,7 @@ class Applicant:
         run.font.name = 'Arial'
 
         para = doc.add_paragraph()
-        run = para.add_run("4. 멋쟁이사자처럼에서 이루고 싶은 목표 및 만들고 싶은 서비스에 대해 설명해 주세요.")
+        run = para.add_run("4. 멋쟁이사자처럼에서 이루고 싶은 목표 및 만들고 싶은 서비스에 대해 설명해 주세요. [글자수] "+str_q3+" 자")
         run.font.name = 'Arial'
         run.bold = True
 
@@ -59,7 +64,7 @@ class Applicant:
         run.font.name = 'Arial'
 
         para = doc.add_paragraph()
-        run = para.add_run("5. 참여했던 팀 활동 중 가장 기억에 남는 경험과 느낀 점을 적어 주세요.")
+        run = para.add_run("5. 참여했던 팀 활동 중 가장 기억에 남는 경험과 느낀 점을 적어 주세요. [글자수] "+str_q4+" 자")
         run.font.name = 'Arial'
         run.bold = True
 
@@ -110,15 +115,15 @@ for i in range(0, len(applicants)):
     html = BeautifulSoup(driver.page_source, 'html.parser')
     ap = Applicant()
     info = html.select('div.user-info')
-    ap.name = info[1].text[-3:]
+    ap.name = info[0].text[-8:]+'_'+info[1].text[-3:]
     print(ap.name)
     for i in info:
         ap.info = ap.info + i.text + "\n"
     ap.part = html.select_one('input#field[checked]').attrs['value']
-    ap.q1 = html.select_one('textarea#answer1').text
-    ap.q2 = html.select_one('textarea#answer2').text
-    ap.q3 = html.select_one('textarea#answer3').text
-    ap.q4 = html.select_one('textarea#answer4').text
+    ap.q1 = html.select_one('textarea#answer1').text + "\n"
+    ap.q2 = html.select_one('textarea#answer2').text + "\n"
+    ap.q3 = html.select_one('textarea#answer3').text + "\n"
+    ap.q4 = html.select_one('textarea#answer4').text + "\n"
     ap.date = html.select_one('input#date[checked]').attrs['value']
     all.append(ap)
     driver.get("http://www.likelion-mju.com/apply/list/submit")
